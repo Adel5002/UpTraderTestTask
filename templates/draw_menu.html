@@ -1,0 +1,46 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="col-sm-3">
+    <div class="menu-card">
+            <h1><a href="{% url 'menu_detail_view' menu.slug %}">{{ menu.name }}</a></h1>
+            {% for item in menu.menuitem_set.all %}
+                <h3><button onclick="myFunc(getElementById('item_child_{{ item.id }}'))">{{ item.name }}</button></h3>
+                <div class="hidden" id="item_child_{{ item.id }}">
+                    {% for child in item.menuitemchild_set.all %}
+                        {% if current_page == child.slug %}
+                            <a class="active" href="{% url 'child_detail_view' child.slug %}">{{ child.text }}</a> <br>
+                        {% else %}
+                            <a href="{% url 'child_detail_view' child.slug %}">{{ child.text }}</a> <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    const myFunc = (id) => {
+        if (id.classList.contains('hidden')) {
+            id.classList.remove('hidden')
+        } else {
+            id.classList.add('hidden')
+        }
+    }
+</script>
+
+
